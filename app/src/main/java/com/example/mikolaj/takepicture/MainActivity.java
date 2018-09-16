@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Location;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,15 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApi;
 
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.handshake.ServerHandshake;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
+
 public class MainActivity extends AppCompatActivity {
 
     ImageView imageView;
@@ -25,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         Button btnCamera =(Button)findViewById(R.id.btnCamera);
@@ -38,9 +49,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button btnSocket = (Button)findViewById(R.id.btnSocket);
+        btnSocket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, SocketActivity.class);
+                startActivity(intent);
+            }
+        });
+
         if(isServicesOK()){
             init();
         }
+
     }
 
     @Override
@@ -82,5 +103,10 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show();
         }
         return false;
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
     }
 }
