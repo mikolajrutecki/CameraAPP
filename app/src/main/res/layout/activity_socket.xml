@@ -9,7 +9,8 @@
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:textSize="30dp" />
 
     <Button
         android:id="@+id/sendButton"
@@ -22,9 +23,9 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="194dp"
-        tools:ignore="MissingConstraints">
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="473dp">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/editText"
@@ -32,6 +33,15 @@
             android:layout_height="wrap_content"
             android:hint="Type your notification" />
     </android.support.design.widget.TextInputLayout>
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="344dp"
+        tools:layout_editor_absoluteY="444dp"
+        tools:ignore="MissingConstraints"/>
+
 
 
 </android.support.constraint.ConstraintLayout>

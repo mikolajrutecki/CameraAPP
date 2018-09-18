@@ -23,6 +23,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
+    Location currentLocation;
+
     @Override
     public void onMapReady(GoogleMap googleMap){
         Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
@@ -49,6 +51,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 mMap.addMarker(mp);
                 mMap.moveCamera(center);
                 mMap.animateCamera(zoom);
+                //Log.d("TEST!!!!!", getCurrentLocation().toString());
+
             }
         });
     }
@@ -70,9 +74,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         getLocationPermission();
     }
 
-    private void getDeviceLocation(){
-        Log.d(TAG, "getDeviceLocation: getting the devices current location");
-    }
 
     private void initMap(){
         Log.d(TAG, "initMap: Initializing map");
@@ -119,4 +120,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
     }
+
+//    public Location getCurrentLocation(){
+//        return
+//    }
+
 }
