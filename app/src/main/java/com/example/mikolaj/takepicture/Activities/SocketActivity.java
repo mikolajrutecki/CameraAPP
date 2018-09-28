@@ -2,8 +2,10 @@ package com.example.mikolaj.takepicture.Activities;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -52,10 +54,30 @@ public class SocketActivity extends AppCompatActivity {
         }
     }
 
-    TextInputEditText editText;
-    TextView textView;
-    String message;
-    String imagePath;
+    private TextInputEditText editText;
+    private TextView textView;
+    private String message;
+    private String imagePath;
+
+    private BroadcastReceiver broadcastReceiver;
+
+    private double lat;
+    private double lng;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(broadcastReceiver == null){
+            broadcastReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    lat = (double)intent.getExtras().get("lat");
+                    lng = (double)intent.getExtras().get("lng");
+                }
+            };
+        }
+        registerReceiver(broadcastReceiver, new IntentFilter("location_update"));
+    }
 
     private static final String WRITE_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
@@ -147,6 +169,8 @@ public class SocketActivity extends AppCompatActivity {
         try{
             dataToSend.put("text", message);
             dataToSend.put("image", encodeImage(imagePath));
+            dataToSend.put("lat", lat);
+            dataToSend.put("lng", lng);
             socket.emit("message", dataToSend);
         } catch(JSONException e){
             e.printStackTrace();
