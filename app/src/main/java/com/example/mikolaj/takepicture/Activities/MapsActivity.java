@@ -1,18 +1,20 @@
-package com.example.mikolaj.takepicture;
+package com.example.mikolaj.takepicture.Activities;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.mikolaj.takepicture.R;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -23,7 +25,27 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    Location currentLocation;
+    private LatLng currentLocation;
+    private BroadcastReceiver broadcastReceiver;
+
+    private double lat;
+    private double lng;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(broadcastReceiver == null){
+            broadcastReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    lat = (double)intent.getExtras().get("lat");
+                    lng = (double)intent.getExtras().get("lng");
+                    currentLocation = new LatLng(lat, lng);
+                }
+            };
+        }
+        registerReceiver(broadcastReceiver, new IntentFilter("location_update"));
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap){
@@ -38,20 +60,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener(){
             @Override
             public void onMyLocationChange(Location location){
-                CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
+                CameraUpdate center = CameraUpdateFactory.newLatLng(currentLocation);
                 CameraUpdate zoom = CameraUpdateFactory.zoomTo(11);
                 mMap.clear();
 
                 MarkerOptions mp = new MarkerOptions();
 
-                mp.position(new LatLng(location.getLatitude(), location.getLongitude()));
+                mp.position(currentLocation);
 
                 mp.title("My Position");
 
                 mMap.addMarker(mp);
                 mMap.moveCamera(center);
                 mMap.animateCamera(zoom);
-                //Log.d("TEST!!!!!", getCurrentLocation().toString());
+
 
             }
         });
@@ -71,7 +93,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        getLocationPermission();
+        initMap();
     }
 
 
@@ -81,48 +103,5 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mapFragment.getMapAsync(MapsActivity.this);
     }
-
-    private void getLocationPermission(){
-        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.ACCESS_COARSE_LOCATION};
-
-        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                    FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                mLocationPermissionsGranted = true;
-                initMap();
-            } else {
-                ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
-            }
-        } else {
-            ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        mLocationPermissionsGranted = false;
-
-        switch(requestCode){
-            case LOCATION_PERMISSION_REQUEST_CODE:{
-                if(grantResults.length > 0){
-                    for(int i = 0; i < grantResults.length; i++){
-                        if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
-                            mLocationPermissionsGranted = false;
-                            return;
-                        }
-                    }
-                    mLocationPermissionsGranted = true;
-                    //initialize our map
-                    initMap();
-                }
-            }
-        }
-    }
-
-//    public Location getCurrentLocation(){
-//        return
-//    }
 
 }

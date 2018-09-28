@@ -22,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:networkSecurityConfig="@xml/network_security_config">
-        <activity android:name=".MainActivity">
+        <activity android:name=".Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,11 +46,13 @@
             android:value="@integer/google_play_services_version"/>
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".Activities.MapsActivity"
             android:label="@string/title_activity_maps"></activity>
         <activity
-            android:name=".SocketActivity"
+            android:name=".Activities.SocketActivity"
             android:label="Socket"></activity>
+
+        <service android:name=".Services.GpsService"/>
 
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
     </application>

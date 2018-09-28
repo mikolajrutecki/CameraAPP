@@ -10,7 +10,7 @@
     android:paddingTop="16dp"
     android:orientation="vertical"
     android:weightSum="10"
-    tools:context=".MainActivity">
+    tools:context=".Activities.MainActivity">
 
     <ImageView
         android:id="@+id/imageView"

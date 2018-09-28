@@ -1,4 +1,4 @@
-package com.example.mikolaj.takepicture;
+package com.example.mikolaj.takepicture.Activities;
 
 import android.Manifest;
 import android.app.Activity;
@@ -25,6 +25,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mikolaj.takepicture.R;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;
@@ -74,13 +75,12 @@ public class SocketActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.textView);
         message = editText.getText().toString().trim();
 
-
         Button sendButton = (Button) findViewById(R.id.sendButton);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 sendMessage();
-                textView.append(message + "\n");
+                textView.append(message + " ");
             }
         });
 
@@ -151,7 +151,6 @@ public class SocketActivity extends AppCompatActivity {
         } catch(JSONException e){
             e.printStackTrace();
         }
-        //socket.emit("message", message);
     }
 
     private String encodeImage(String path)
