@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,37 +10,45 @@
     android:paddingTop="16dp"
     android:orientation="vertical"
     android:weightSum="10"
-    tools:context=".Activities.MainActivity">
+    android:background="#7B2020"
+    tools:context=".activities.MainActivity">
+
 
     <ImageView
         android:id="@+id/imageView"
+        android:layout_width="270dp"
+        android:layout_height="201dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="69dp"
         android:layout_weight="9"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/btnCamera"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:background="@android:color/holo_red_dark"
-        android:textColor="@android:color/white"
-        android:text="@string/open_camera"/>
-
-    <Button
-        android:id="@+id/btnMap"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:background="@android:color/holo_blue_light"
-        android:textColor="@android:color/white"
-        android:text="Open Map"/>
+        android:src="@drawable/logo" />
 
     <Button
         android:id="@+id/btnSocket"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Open WebSocket"/>
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="206dp"
+        android:background="@drawable/reportbtn" />
 
+    <Button
+        android:id="@+id/btnMap"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="160dp" 
+        android:background="@drawable/mapbtn"/>
 
-</LinearLayout>
+    <Button
+        android:id="@+id/btnCamera"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/capturebtn" />
+    
+
+</RelativeLayout>

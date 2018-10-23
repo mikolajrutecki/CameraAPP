@@ -1,7 +1,6 @@
-package com.example.mikolaj.takepicture.Activities;
+package com.example.mikolaj.takepicture.activities;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -28,7 +26,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mikolaj.takepicture.R;
-import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +34,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URISyntaxException;
 
 import io.socket.client.IO;
@@ -79,8 +75,6 @@ public class SocketActivity extends AppCompatActivity {
         registerReceiver(broadcastReceiver, new IntentFilter("location_update"));
     }
 
-    private static final String WRITE_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,11 +87,11 @@ public class SocketActivity extends AppCompatActivity {
 
         socket.connect();
 
-        editText = (TextInputEditText) findViewById(R.id.editText);
-        textView = (TextView) findViewById(R.id.textView);
+        editText = findViewById(R.id.editText);
+        textView = findViewById(R.id.textView);
         message = editText.getText().toString().trim();
 
-        Button sendButton = (Button) findViewById(R.id.sendButton);
+        Button sendButton = findViewById(R.id.sendButton);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,7 +100,7 @@ public class SocketActivity extends AppCompatActivity {
             }
         });
 
-        ImageButton imageButton = (ImageButton)findViewById(R.id.imageButton);
+        ImageButton imageButton = findViewById(R.id.imageButton);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -144,6 +138,7 @@ public class SocketActivity extends AppCompatActivity {
                 }
                 break;
         }
+
     }
 
     @Override
@@ -190,8 +185,7 @@ public class SocketActivity extends AppCompatActivity {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.JPEG,100,baos);
         byte[] b = baos.toByteArray();
-        String encImage = Base64.encodeToString(b, Base64.DEFAULT);
-        return encImage;
+        return Base64.encodeToString(b, Base64.DEFAULT);
     }
 
     @Override

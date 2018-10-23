@@ -1,7 +1,6 @@
-package com.example.mikolaj.takepicture.Activities;
+package com.example.mikolaj.takepicture.activities;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +11,6 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,19 +18,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.mikolaj.takepicture.R;
-import com.example.mikolaj.takepicture.Services.GpsService;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.maps.GoogleMap;
+import com.example.mikolaj.takepicture.services.GpsService;
 
 public class MainActivity extends AppCompatActivity {
 
-    ImageView imageView;
-
-    private static final String TAG = "MainActivity:";
+    private ImageView imageView;
 
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -57,15 +49,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btnCamera =(Button)findViewById(R.id.btnCamera);
-        imageView = (ImageView)findViewById(R.id.imageView);
+        Button btnCamera = findViewById(R.id.btnCamera);
+        imageView = findViewById(R.id.imageView);
 
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button btnSocket = (Button)findViewById(R.id.btnSocket);
+        Button btnSocket = findViewById(R.id.btnSocket);
         btnSocket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if(!check_permissions()){
+        if(!checkPermissions()){
             enableDisableGPS();
             init();
         }
@@ -99,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init(){
-        Button btnMap = (Button)findViewById(R.id.btnMap);
+        Button btnMap = findViewById(R.id.btnMap);
         btnMap.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -121,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private boolean check_permissions(){
+    private boolean checkPermissions(){
         if(Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this, FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this, COURSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             requestPermissions(new String[]{FINE_LOCATION, COURSE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
@@ -138,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                 enableDisableGPS();
                 init();
             } else {
-                check_permissions();
+                checkPermissions();
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.example.mikolaj.takepicture.Activities;
+package com.example.mikolaj.takepicture.activities;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
@@ -30,6 +30,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private double lat;
     private double lng;
+
+    private static final String TAG = "MapActivity";
+
+    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+    private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+
+    private GoogleMap mMap;
 
     @Override
     protected void onResume() {
@@ -79,15 +86,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
-    private static final String TAG = "MapActivity";
-
-    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
-    private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
-
-    private Boolean mLocationPermissionsGranted = false;
-    private GoogleMap mMap;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -95,7 +93,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         initMap();
     }
-
 
     private void initMap(){
         Log.d(TAG, "initMap: Initializing map");

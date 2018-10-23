@@ -1,4 +1,4 @@
-package com.example.mikolaj.takepicture.Services;
+package com.example.mikolaj.takepicture.services;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
