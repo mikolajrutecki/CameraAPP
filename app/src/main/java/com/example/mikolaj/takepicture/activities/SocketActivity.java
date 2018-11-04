@@ -44,7 +44,7 @@ public class SocketActivity extends AppCompatActivity {
     private Socket socket;
     {
         try {
-            socket = IO.socket("http://192.168.1.15:8000");
+            socket = IO.socket("http://10.0.2.2:8000");
         } catch (URISyntaxException e){
             throw new RuntimeException(e);
         }
@@ -80,12 +80,13 @@ public class SocketActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_socket);
 
+        //Connects to the WebSocket
+        socket.connect();
+
         if(checkPermission()){
         } else {
             requestPermission();
         }
-
-        socket.connect();
 
         editText = findViewById(R.id.editText);
         textView = findViewById(R.id.textView);

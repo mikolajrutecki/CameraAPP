@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TakePicture</string>
+    <string name="app_name">Camera App</string>
     <string name="title_activity_maps">Map</string>
     <string name="open_camera">Open Camera</string>
 </resources>
