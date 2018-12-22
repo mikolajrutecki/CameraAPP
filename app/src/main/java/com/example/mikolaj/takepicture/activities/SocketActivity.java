@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -30,25 +31,18 @@ import com.example.mikolaj.takepicture.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.net.URISyntaxException;
-
-import io.socket.client.IO;
-import io.socket.client.Socket;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class SocketActivity extends AppCompatActivity {
-
-    private Socket socket;
-    {
-        try {
-            socket = IO.socket("http://10.0.2.2:8000");
-        } catch (URISyntaxException e){
-            throw new RuntimeException(e);
-        }
-    }
 
     private TextInputEditText editText;
     private TextView textView;
@@ -80,8 +74,6 @@ public class SocketActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_socket);
 
-        //Connects to the WebSocket
-        socket.connect();
 
         if(checkPermission()){
         } else {
@@ -96,7 +88,11 @@ public class SocketActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendMessage();
+                try {
+                    sendMessage();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 textView.append(message + " ");
             }
         });
@@ -158,19 +154,48 @@ public class SocketActivity extends AppCompatActivity {
         }
     }
 
-    private void sendMessage() {
-        message = editText.getText().toString().trim();
-        editText.setText("");
-        JSONObject dataToSend = new JSONObject();
+    private JSONObject createJSON() {
+        final JSONObject dataToSend = new JSONObject();
         try{
+            dataToSend.put("phone", 72883424); //TODO
+            dataToSend.put("latitude", lat);
+            dataToSend.put("longitude", lng);
             dataToSend.put("text", message);
-            dataToSend.put("image", encodeImage(imagePath));
-            dataToSend.put("lat", lat);
-            dataToSend.put("lng", lng);
-            socket.emit("message", dataToSend);
+            dataToSend.put("picture", encodeImage(imagePath));
+            return dataToSend;
         } catch(JSONException e){
-            e.printStackTrace();
+            Log.d("SocketActivity", "Can't format JSON");
         }
+        return null;
+    }
+
+    private void sendMessage() throws IOException {
+        final JSONObject json = createJSON();
+
+        AsyncTask.execute(new Runnable(){
+            @Override
+            public void run() {
+                try {
+                    getServerResponse(json);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
+
+    private void getServerResponse(JSONObject json) throws IOException {
+        URL url = new URL("http://10.0.2.2:8001/markers/");
+
+        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json");
+
+        setPostRequestContent(conn, json);
+        conn.connect();
+        Log.d("API Response Code: ", "" + conn.getResponseCode());
+        conn.disconnect();
     }
 
     private String encodeImage(String path)
@@ -189,10 +214,22 @@ public class SocketActivity extends AppCompatActivity {
         return Base64.encodeToString(b, Base64.DEFAULT);
     }
 
+    private void setPostRequestContent(HttpURLConnection conn,
+                                       JSONObject jsonObject) throws IOException {
+
+        OutputStream os = conn.getOutputStream();
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+        writer.write(jsonObject.toString());
+        Log.i(SocketActivity.class.toString(), jsonObject.toString());
+        writer.flush();
+        writer.close();
+        os.close();
+    }
+
     @Override
     public void onDestroy(){
         super.onDestroy();
-        socket.disconnect();
+//        socket.disconnect();
     }
 
 }
