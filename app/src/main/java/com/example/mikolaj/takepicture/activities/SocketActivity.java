@@ -163,10 +163,12 @@ public class SocketActivity extends AppCompatActivity {
         editText.setText("");
         JSONObject dataToSend = new JSONObject();
         try{
+            //dataToSend.put("id", 555);
+            dataToSend.put("phone", 72833242); //TODO
+            dataToSend.put("latitude", lat);
+            dataToSend.put("longitude", lng);
             dataToSend.put("text", message);
-            dataToSend.put("image", encodeImage(imagePath));
-            dataToSend.put("lat", lat);
-            dataToSend.put("lng", lng);
+            dataToSend.put("picture", encodeImage(imagePath));
             socket.emit("message", dataToSend);
         } catch(JSONException e){
             e.printStackTrace();
