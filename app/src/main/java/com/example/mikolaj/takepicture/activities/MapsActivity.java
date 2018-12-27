@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.mikolaj.takepicture.Helper;
 import com.example.mikolaj.takepicture.R;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,9 +28,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private LatLng currentLocation;
     private BroadcastReceiver broadcastReceiver;
-
-    private double lat;
-    private double lng;
 
     private static final String TAG = "MapActivity";
 
@@ -45,9 +43,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             broadcastReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    lat = (double)intent.getExtras().get("lat");
-                    lng = (double)intent.getExtras().get("lng");
-                    currentLocation = new LatLng(lat, lng);
+                    Helper.lat = (double)intent.getExtras().get("lat");
+                    Helper.lng = (double)intent.getExtras().get("lng");
+                    currentLocation = new LatLng(Helper.lat, Helper.lng);
                 }
             };
         }
@@ -99,6 +97,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(MapsActivity.this);
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        unregisterReceiver(broadcastReceiver);
     }
 
 }

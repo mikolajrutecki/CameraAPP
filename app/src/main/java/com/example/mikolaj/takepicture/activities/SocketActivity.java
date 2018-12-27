@@ -17,15 +17,19 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mikolaj.takepicture.Helper;
 import com.example.mikolaj.takepicture.R;
+import com.example.mikolaj.takepicture.services.GpsService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,15 +48,17 @@ public class SocketActivity extends AppCompatActivity {
     private Socket socket;
     {
         try {
-            socket = IO.socket("http://10.0.2.2:8000");
+            socket = IO.socket("http://192.168.1.13:8000");
         } catch (URISyntaxException e){
             throw new RuntimeException(e);
         }
     }
 
     private TextInputEditText editText;
+    private EditText editPhone;
     private TextView textView;
     private String message;
+    private String phone;
     private String imagePath;
 
     private BroadcastReceiver broadcastReceiver;
@@ -67,8 +73,8 @@ public class SocketActivity extends AppCompatActivity {
             broadcastReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    lat = (double)intent.getExtras().get("lat");
-                    lng = (double)intent.getExtras().get("lng");
+                    Helper.lat = (double)intent.getExtras().get("lat");
+                    Helper.lng = (double)intent.getExtras().get("lng");
                 }
             };
         }
@@ -89,6 +95,7 @@ public class SocketActivity extends AppCompatActivity {
         }
 
         editText = findViewById(R.id.editText);
+        editPhone = findViewById(R.id.editPhone);
         textView = findViewById(R.id.textView);
         message = editText.getText().toString().trim();
 
@@ -160,13 +167,14 @@ public class SocketActivity extends AppCompatActivity {
 
     private void sendMessage() {
         message = editText.getText().toString().trim();
+        phone = editPhone.getText().toString().trim();
         editText.setText("");
         JSONObject dataToSend = new JSONObject();
         try{
             //dataToSend.put("id", 555);
-            dataToSend.put("phone", 72833242); //TODO
-            dataToSend.put("latitude", lat);
-            dataToSend.put("longitude", lng);
+            dataToSend.put("phone", phone);
+            dataToSend.put("latitude", Helper.lat);
+            dataToSend.put("longitude", Helper.lng);
             dataToSend.put("text", message);
             dataToSend.put("picture", encodeImage(imagePath));
             socket.emit("message", dataToSend);
@@ -189,6 +197,12 @@ public class SocketActivity extends AppCompatActivity {
         bm.compress(Bitmap.CompressFormat.JPEG,100,baos);
         byte[] b = baos.toByteArray();
         return Base64.encodeToString(b, Base64.DEFAULT);
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        unregisterReceiver(broadcastReceiver);
     }
 
     @Override

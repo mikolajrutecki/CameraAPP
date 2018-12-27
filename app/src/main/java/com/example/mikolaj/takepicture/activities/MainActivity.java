@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.example.mikolaj.takepicture.Helper;
 import com.example.mikolaj.takepicture.R;
 import com.example.mikolaj.takepicture.services.GpsService;
 
@@ -42,7 +43,9 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     Log.e("LATITUDE: ", intent.getExtras().get("lat").toString());
+                    Helper.lat = (double)intent.getExtras().get("lat");
                     Log.e("LONGITUDE", intent.getExtras().get("lng").toString());
+                    Helper.lng = (double)intent.getExtras().get("lng");
                 }
             };
             registerReceiver(broadcastReceiver, new IntentFilter("location_update"));
@@ -131,6 +134,14 @@ public class MainActivity extends AppCompatActivity {
                 checkPermissions();
             }
         }
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+//        if(broadcastReceiver != null) {
+//            unregisterReceiver(broadcastReceiver);
+//        }
     }
     
     @Override
