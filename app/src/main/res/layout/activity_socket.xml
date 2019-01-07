@@ -15,8 +15,8 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="351dp"
-        android:layout_height="324dp"
+        android:layout_width="361dp"
+        android:layout_height="222dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="0dp"
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="76dp"
+        android:layout_marginBottom="114dp"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="473dp">
@@ -46,23 +46,12 @@
             android:id="@+id/editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Type your notification"
-            android:textColorHint="#FFFFFF"/>
+            android:hint="Type your notification*"
+            android:textColorHint="#FFFFFF" />
 
 
     </android.support.design.widget.TextInputLayout>
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="94dp"
-        android:layout_height="36dp"
-        android:layout_above="@+id/sendButton"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="18dp"
-        android:layout_marginBottom="-5dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="344dp"
-        tools:layout_editor_absoluteY="444dp" />
 
     <EditText
         android:id="@+id/editPhone"
@@ -70,11 +59,62 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/sendButton"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="1dp"
-        android:layout_marginBottom="128dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="183dp"
         android:ems="10"
-        android:hint="Phone number"
-        android:inputType="phone" />
+        android:hint="Phone number*"
+        android:textColorHint="#FFFFFF"
+        android:inputType="phone"
+        android:maxLength="9" />
+
+    <TextView
+        android:id="@+id/imgTextView"
+        android:layout_width="241dp"
+        android:layout_height="39dp"
+        android:layout_alignStart="@+id/sendButton"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="2dp"
+        android:gravity="center_vertical"
+        android:text="Pick image using button on the right"
+        android:textColor="#FFFFFF"
+        android:textSize="14dp" />
+
+    <FrameLayout
+        android:layout_width="100dp"
+        android:layout_height="45dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true">
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="100dp"
+            android:layout_height="45dp"
+            android:layout_alignEnd="@+id/sendButton"
+            android:layout_centerVertical="true"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="350dp"
+            tools:layout_editor_absoluteY="444dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:clickable="false"
+            android:text="Pick image"
+            android:textColor="#000000"
+            android:textStyle=""/>
+
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/imgView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_alignStart="@+id/textView"
+        android:layout_alignTop="@+id/textView"
+         />
 
 
 </RelativeLayout>
+

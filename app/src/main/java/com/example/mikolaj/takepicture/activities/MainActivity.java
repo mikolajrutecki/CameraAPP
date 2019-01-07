@@ -23,6 +23,8 @@ import com.example.mikolaj.takepicture.Helper;
 import com.example.mikolaj.takepicture.R;
 import com.example.mikolaj.takepicture.services.GpsService;
 
+import java.io.FileOutputStream;
+
 public class MainActivity extends AppCompatActivity {
 
     private ImageView imageView;
@@ -88,7 +90,9 @@ public class MainActivity extends AppCompatActivity {
 //    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 //        super.onActivityResult(requestCode, resultCode, data);
 //        Bitmap bitmap = (Bitmap)data.getExtras().get("data");
-//        imageView.setImageBitmap(bitmap);
+//        try {
+//            FileOutputStream fos = getApplicationContext().openFileOutput()
+//        }
 //    }
 
     private void init(){

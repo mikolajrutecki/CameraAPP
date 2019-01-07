@@ -24,6 +24,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,11 +58,15 @@ public class SocketActivity extends AppCompatActivity {
     private TextInputEditText editText;
     private EditText editPhone;
     private TextView textView;
-    private String message;
-    private String phone;
-    private String imagePath;
+    private TextView imgTextView;
+    private ImageView imgView;
+    private String message = " ";
+    private String phone = " ";
+    private String imagePath = " ";
 
     private BroadcastReceiver broadcastReceiver;
+
+    private boolean imageSent = false;
 
     private double lat;
     private double lng;
@@ -97,6 +102,8 @@ public class SocketActivity extends AppCompatActivity {
         editText = findViewById(R.id.editText);
         editPhone = findViewById(R.id.editPhone);
         textView = findViewById(R.id.textView);
+        imgTextView = findViewById(R.id.imgTextView);
+        imgView = findViewById(R.id.imgView);
         message = editText.getText().toString().trim();
 
         Button sendButton = findViewById(R.id.sendButton);
@@ -104,7 +111,9 @@ public class SocketActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 sendMessage();
-                textView.append(message + " ");
+                if(imageSent){
+                    textView.append(message + " ");
+                }
             }
         });
 
@@ -155,12 +164,14 @@ public class SocketActivity extends AppCompatActivity {
         if(requestCode == 1 && resultCode == RESULT_OK && data != null){
             Uri selectedImage = data.getData();
             String[] filePath = {MediaStore.Images.Media.DATA};
-
             Cursor cursor = getContentResolver().query(selectedImage, filePath, null, null, null);
             cursor.moveToFirst();
             int columnIndex = cursor.getColumnIndex(filePath[0]);
             imagePath = cursor.getString(columnIndex);
-            textView.append(imagePath);
+            imgTextView.setText(imagePath);
+            Bitmap bm = BitmapFactory.decodeFile(imagePath);
+            Bitmap scaledBm = Bitmap.createScaledBitmap(bm, 800,600, true);
+            imgView.setImageBitmap(scaledBm);
             cursor.close();
         }
     }
@@ -168,18 +179,25 @@ public class SocketActivity extends AppCompatActivity {
     private void sendMessage() {
         message = editText.getText().toString().trim();
         phone = editPhone.getText().toString().trim();
-        editText.setText("");
-        JSONObject dataToSend = new JSONObject();
-        try{
-            //dataToSend.put("id", 555);
-            dataToSend.put("phone", phone);
-            dataToSend.put("latitude", Helper.lat);
-            dataToSend.put("longitude", Helper.lng);
-            dataToSend.put("text", message);
-            dataToSend.put("picture", encodeImage(imagePath));
-            socket.emit("message", dataToSend);
-        } catch(JSONException e){
-            e.printStackTrace();
+
+        if(message.equals(" ") || phone.equals(" ") || imagePath.equals(" ")){
+            Toast.makeText(getApplicationContext(), "All fields are required!", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            editText.setText("");
+            JSONObject dataToSend = new JSONObject();
+            try{
+                //dataToSend.put("id", 555);
+                dataToSend.put("phone", phone);
+                dataToSend.put("latitude", Helper.lat);
+                dataToSend.put("longitude", Helper.lng);
+                dataToSend.put("text", message);
+                dataToSend.put("picture", encodeImage(imagePath));
+                socket.emit("message", dataToSend);
+
+            } catch(JSONException e){
+                e.printStackTrace();
+            }
         }
     }
 
