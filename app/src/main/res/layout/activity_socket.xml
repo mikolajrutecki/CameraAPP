@@ -70,7 +70,7 @@
     <TextView
         android:id="@+id/imgTextView"
         android:layout_width="241dp"
-        android:layout_height="39dp"
+        android:layout_height="60dp"
         android:layout_alignStart="@+id/sendButton"
         android:layout_centerVertical="true"
         android:layout_marginStart="2dp"

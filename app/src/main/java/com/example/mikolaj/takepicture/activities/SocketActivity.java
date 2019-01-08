@@ -194,10 +194,10 @@ public class SocketActivity extends AppCompatActivity {
                 dataToSend.put("text", message);
                 dataToSend.put("picture", encodeImage(imagePath));
                 socket.emit("message", dataToSend);
-
             } catch(JSONException e){
                 e.printStackTrace();
             }
+            Toast.makeText(getApplicationContext(), "Notification has been sent!", Toast.LENGTH_SHORT).show();
         }
     }
 
