@@ -40,6 +40,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
+import java.util.UUID;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -91,8 +92,8 @@ public class SocketActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_socket);
 
-        //Connects to the WebSocket
-        socket.connect();
+//        //Connects to the WebSocket
+//        socket.connect();
 
         if(checkPermission()){
         } else {
@@ -177,6 +178,7 @@ public class SocketActivity extends AppCompatActivity {
     }
 
     private void sendMessage() {
+        socket.connect();
         message = editText.getText().toString().trim();
         phone = editPhone.getText().toString().trim();
 
@@ -188,6 +190,8 @@ public class SocketActivity extends AppCompatActivity {
             JSONObject dataToSend = new JSONObject();
             try{
                 //dataToSend.put("id", 555);
+                UUID hash = UUID.randomUUID();
+                dataToSend.put("hash", hash);
                 dataToSend.put("phone", phone);
                 dataToSend.put("latitude", Helper.lat);
                 dataToSend.put("longitude", Helper.lng);
