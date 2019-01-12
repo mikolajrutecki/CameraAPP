@@ -178,14 +178,14 @@ public class SocketActivity extends AppCompatActivity {
     }
 
     private void sendMessage() {
-        socket.connect();
         message = editText.getText().toString().trim();
         phone = editPhone.getText().toString().trim();
 
-        if(message.equals(" ") || phone.equals(" ") || imagePath.equals(" ")){
+        if((message.equals(" ") || message.equals("")) || phone.equals(" ") || imagePath.equals(" ")){
             Toast.makeText(getApplicationContext(), "All fields are required!", Toast.LENGTH_SHORT).show();
         }
         else {
+            socket.connect();
             editText.setText("");
             JSONObject dataToSend = new JSONObject();
             try{
